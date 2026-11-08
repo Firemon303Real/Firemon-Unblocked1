@@ -23,7 +23,14 @@ const host = process.env.HOST || (process.env.PORT ? "0.0.0.0" : "127.0.0.1");
 const password = process.env.FIREMON_ACCESS_PASSWORD || "";
 const publicBind = !isLoopback(host);
 const suppliedSessionSecret = process.env.FIREMON_SESSION_SECRET || "";
-const trustProxy = process.env.TRUST_PROXY === "true" || process.env.TRUST_PROXY === "1" ? true : (process.env.TRUST_PROXY ? parseInt(process.env.TRUST_PROXY) : true);
+// Number of trusted proxy hops in front of this server. Railway/Render/Fly put exactly one
+// HTTPS proxy in front, so default to 1. Only "false"/"0"/"off"/"no" disables it.
+const trustProxy = (() => {
+  const raw = (process.env.TRUST_PROXY || "").trim().toLowerCase();
+  if (["false", "0", "off", "no"].includes(raw)) return false;
+  const hops = parseInt(raw, 10);
+  return Number.isInteger(hops) && hops > 0 ? hops : 1;
+})();
 const authEnabled = Boolean(password);
 const sessionSecret = suppliedSessionSecret || (authEnabled ? crypto.randomBytes(32).toString("hex") : "");
 const production = process.env.NODE_ENV === "production";
