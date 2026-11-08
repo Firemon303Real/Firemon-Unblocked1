@@ -47,5 +47,26 @@
     "description": "balls and weapons maybe idk?",
     "htmlFile": "game-about-balls-and-weapons.html",
     "imageUrl": "/game-logos/game-about-balls-and-weapons.png"
+  },
+  {
+    "id": "quantum-clicker",
+    "title": "Quantum Clicker",
+    "description": "some clicker idk",
+    "htmlFile": "quantum-clicker.html",
+    "imageUrl": "/game-logos/quantum-clicker.jpg"
+  },
+  {
+    "id": "monkey-mart",
+    "title": "Monkey Mart",
+    "description": "monkey make money ig",
+    "htmlFile": "monkey-mart.html",
+    "imageUrl": "/game-logos/monkey-mart.webp"
+  },
+  {
+    "id": "2048",
+    "title": "2048",
+    "description": "move numbers you nerd",
+    "htmlFile": "2048.html",
+    "imageUrl": "/game-logos/2048.png"
   }
 ]

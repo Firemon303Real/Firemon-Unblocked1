@@ -64,8 +64,10 @@ if (password && password.length < 12) {
 if (suppliedSessionSecret && Buffer.byteLength(suppliedSessionSecret) < 32) {
   throw new Error("FIREMON_SESSION_SECRET must be at least 32 bytes.");
 }
-if (publicBind && (!password || !suppliedSessionSecret)) {
-  throw new Error("Public binding requires FIREMON_ACCESS_PASSWORD (12+ characters) and FIREMON_SESSION_SECRET (32+ bytes).");
+// The access password is optional: leave FIREMON_ACCESS_PASSWORD unset for a public site
+// with no sign-in screen, or set it to turn the sign-in screen back on.
+if (publicBind && !suppliedSessionSecret) {
+  throw new Error("Public binding requires FIREMON_SESSION_SECRET (32+ bytes).");
 }
 if (publicBind && !trustProxy) {
   throw new Error("Public binding requires TRUST_PROXY for the trusted HTTPS reverse proxy in front of this server.");
@@ -288,6 +290,8 @@ server.on("error", (error) => {
 server.listen(port, host, () => {
   console.log(`Firemon Unblocked listening on ${host}:${port}`);
   if (authEnabled) console.log("Server-side password protection is enabled.");
-  if (publicBind) console.log("Public binding is protected by password authentication and a trusted HTTPS proxy.");
+  if (publicBind) console.log(authEnabled
+    ? "Public binding is protected by password authentication and a trusted HTTPS proxy."
+    : "Public mode: no sign-in screen (FIREMON_ACCESS_PASSWORD is not set). HTTPS is enforced via the trusted proxy.");
 });
 
